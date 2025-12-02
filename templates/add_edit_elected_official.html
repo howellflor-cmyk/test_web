@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block head %}
+  <title>{% if action == 'add' %}Add Official{% else %}Edit Official{% endif %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/add_resident.css') }}">
+
+<div class="add-resident-container" role="main" style="max-width:720px;margin:40px auto;">
+  <form method="post" action="{% if action == 'add' %}{{ url_for('add_elected_official') }}{% else %}{{ url_for('edit_elected_official', id=official.id) }}{% endif %}" enctype="multipart/form-data">
+    <h1 class="form-title">{% if action == 'add' %}Add Elected Official{% else %}Edit Elected Official{% endif %}</h1>
+
+    <div class="form-group">
+      <label for="name">Full name *</label>
+      <input id="name" name="name" type="text" required value="{{ official.name if official else '' }}">
+    </div>
+
+    <div class="form-group">
+      <label for="position">Position *</label>
+      <select id="position" name="position" required>
+        <option value="">— select —</option>
+        <option value="Chairman" {% if official and official.position == 'Chairman' %}selected{% endif %}>Chairman</option>
+        <option value="Kagawad" {% if official and official.position == 'Kagawad' %}selected{% endif %}>Kagawad</option>
+      </select>
+      <small class="form-help">Only one Chairman allowed. Up to 7 Kagawad allowed.</small>
+    </div>
+
+    <div class="form-group">
+      <label for="order">Kagawad order (1..7)</label>
+      <input id="order" name="order" type="number" min="1" max="7" value="{{ official.order if official and official.order else '' }}">
+    </div>
+
+    <div class="form-group">
+      <label for="photo">Photo (jpg, png) {% if action=='edit' %}(leave blank to keep current){% endif %}</label>
+      <input id="photo" name="photo" type="file" accept="image/*">
+      {% if official and official.photo_filename %}
+        <div style="margin-top:10px;">
+          <img src="{{ url_for('static', filename='uploads/elected_officials/' ~ official.photo_filename) }}" alt="photo" style="width:140px;border-radius:12px;border:4px solid #0c55d6;">
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">{% if action == 'add' %}Add{% else %}Save{% endif %}</button>
+      <a href="{{ url_for('elected_officials') }}" class="btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

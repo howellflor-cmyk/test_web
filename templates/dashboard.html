@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Dashboard - Barangay Information System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+    <div class="dashboard-main">
+    <h1 class="dashboard-title">Dashboard</h1>
+    <div class="dashboard-stats-grid dashboard-stats-margin">
+
+        <div class="dashboard-stats-row">
+            <div class="stat-card card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Population</h5>
+                    <p class="card-text">{{ total_population }}</p>
+                </div>
+            </div>
+            <div class="stat-card card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Males</h5>
+                    <p class="card-text">{{ total_males }}</p>
+                </div>
+            </div>
+            <div class="stat-card card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Females</h5>
+                    <p class="card-text">{{ total_females }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="more-stats" class="dashboard-more-stats">
+            <div class="dashboard-stats-row">
+                <div class="stat-card card">
+                    <div class="card-body">
+                        <h5 class="card-title">Senior Citizens</h5>
+                        <p class="card-text">{{ total_senior_citizens }}</p>
+                    </div>
+                </div>
+                <div class="stat-card card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Voters</h5>
+                        <p class="card-text">{{ total_voters }}</p>
+                    </div>
+                </div>
+                <div class="stat-card card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Non-Voters</h5>
+                        <p class="card-text">{{ total_non_voters }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-see-more">
+            <button id="seeMoreBtn" onclick="toggleStats()">See More</button>
+        </div>
+    </div>
+{% endblock %}

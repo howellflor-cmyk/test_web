@@ -1,0 +1,52 @@
+{%extends "base.html" %}
+
+{% block head %}
+    <title>Household {{ household.household_no }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/household_detail.css') }}">
+</head>
+<body>
+    <header class="page-header">
+        <div class="container">
+            <h1 class="title">Household No.
+                <span class="pill">{{ household.household_no }}</span>
+            </h1>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        <section class="info-card">
+            <div class="info-left">
+                <div class="row"><span class="label">Region:</span> <strong>{{ household.region or '—' }}</strong></div>
+                <div class="row"><span class="label">Province:</span> <strong>{{ household.province or '—' }}</strong></div>
+                <div class="row"><span class="label">City/Municipality:</span> <strong>{{ household.city_municipality or '—' }}</strong></div>
+            </div>
+            <div class="info-right">
+                <div class="row"><span class="label">Barangay:</span> <strong>{{ household.barangay or '—' }}</strong></div>
+                <div class="row"><span class="label">Purok:</span> <strong>{{ household.purok or '—' }}</strong></div>
+            </div>
+        </section>
+
+        <hr class="divider">
+
+        <section class="members-section">
+            <h2 class="section-title">| Family Member</h2>
+
+            <div class="members-list">
+                {% for m in members %}
+                <article class="member-card">
+                    <div class="avatar" aria-hidden="true"></div>
+                    <div class="member-name">
+                        <a href="{{ url_for('resident_info', id=m.id) }}" class="name-link">{{ m.last_name }}, {{ m.first_name }}{% if m.middle_name %} {{ m.middle_name[0] }}.{% endif %}</a>
+                    </div>
+                    <div class="member-action">
+                        <a class="btn-info" href="{{ url_for('resident_info', id=m.id) }}">See Info</a>
+                    </div>
+                </article>
+                {% else %}
+                <p>No members found.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+</body>
+{% endblock %}

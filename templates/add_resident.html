@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Add Resident - Barangay Information System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/add_resident.css') }}">
+    <script src="{{ url_for('static', filename='js/resident_form.js') }}"></script>
+    <div class="add-resident-container">
+        <h1 class="form-title">Add New Resident</h1>
+        <form method="POST" action="{{ url_for('add_resident') }}">
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" required />
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" required />
+                <label for="middle_name">Middle Name</label>
+                <input type="text" id="middle_name" name="middle_name" />
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+                <select name="gender" required>
+                    <option value="" selected disabled>Select gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" min="0" id="age" name="age" required />
+            </div>
+            <div class="form-group">
+                <label for="purok">Purok</label>
+                <input type="text" id="purok" name="purok" required />
+            </div>
+            <div class="form-group">
+                <label for="date_of_birth">Date of Birth</label>
+                <input type="date" id="date_of_birth" name="date_of_birth" />
+            </div>
+            <div class="form-group">
+                <label for="place_of_birth">Place of Birth</label>
+                <input type="text" id="place_of_birth" name="place_of_birth" />
+            </div>
+            <div class="form-group">
+                <label for="civil_status">Civil Status</label>
+                <input type="text" id="civil_status" name="civil_status" />
+            </div>
+            <div class="form-group">
+                <label for="citizenship">Citizenship</label>
+                <input type="text" id="citizenship" name="citizenship" />
+            </div>
+            <div class="form-group">
+                <label for="occupation">Occupation</label>
+                <input type="text" id="occupation" name="occupation" />
+            </div>
+            <div class="form-group">
+                <label>Voter Status</label>
+                <select name="voter_status" required>
+                    <option value="" selected disabled>Select status</option>
+                    <option value="Voter">Voter</option>
+                    <option value="Non-Voter">Non-Voter</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Senior Citizen</label>
+                <select name="senior_citizen" required>
+                    <option value="" selected disabled>Select status</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <!-- Household selection -->
+            <div class="form-group">
+                <label for="household_select">Household</label>
+                <select id="household_select" name="household_select" class="form-control" onchange="toggleNewHousehold(this.value)">
+                    <option value="none" selected>-- No household --</option>
+                    {% for h in households %}
+                    <option value="{{ h.id }}">{{ h.household_no }} — {{ h.barangay or '' }} {{ h.city_municipality or '' }}</option>
+                    {% endfor %}
+                    <option value="new">+ Add new household</option>
+                </select>
+            </div>
+
+            <!-- New household fields (hidden by default) -->
+            <div id="new_household_fields" style="display:none;margin-top:10px;padding:10px;border:1px solid #ddd;border-radius:4px;background:#fafafa;">
+                <h4 style="margin-top:0">New Household</h4>
+                <div class="form-group">
+                    <label for="new_household_no">Household No.</label>
+                    <input type="text" id="new_household_no" name="new_household_no" class="form-control" placeholder="e.g. 00187B">
+                </div>
+                <div class="form-group">
+                    <label for="new_region">Region</label>
+                    <input type="text" id="new_region" name="new_region" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_province">Province</label>
+                    <input type="text" id="new_province" name="new_province" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_city_municipality">City/Municipality</label>
+                    <input type="text" id="new_city_municipality" name="new_city_municipality" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_barangay">Barangay</label>
+                    <input type="text" id="new_barangay" name="new_barangay" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="new_purok">Purok</label>
+                    <input type="text" id="new_purok" name="new_purok" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Add Resident</button>
+                <a href="{{ url_for('residents') }}" class="btn-secondary">Cancel</a>
+            </div>
+        </form>
+  </div>
+
+
+
+{% endblock %}

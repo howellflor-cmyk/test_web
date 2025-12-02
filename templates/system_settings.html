@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>System Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/system_settings.css') }}">
+
+<div class="add-resident-container" role="main">
+    <h1 class="form-title">System Settings</h1>
+
+    <!-- Change Password Section -->
+    <section>
+        <h2>Change Your Password</h2>
+
+        <form method="post" action="{{ url_for('system_settings') }}">
+            <input type="hidden" name="action" value="change_password">
+
+            <div class="form-group">
+                <label for="current_password">Current Password *</label>
+                <input id="current_password" name="current_password" type="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="new_password">New Password *</label>
+                <input id="new_password" name="new_password" type="password" required>
+                <small class="form-help">Minimum 6 characters</small>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm New Password *</label>
+                <input id="confirm_password" name="confirm_password" type="password" required>
+            </div>
+
+            <div style="grid-column: 1 / -1; margin-top: 10px;">
+                <button type="submit" class="btn-primary">Change Password</button>
+            </div>
+        </form>
+    </section>
+
+    <hr class="divider">
+
+    <!-- Create New User Section -->
+    {% if current_user.role == 'admin' %}
+    <section>
+        <h2>Create New User</h2>
+
+        <form method="post" action="{{ url_for('system_settings') }}">
+            <input type="hidden" name="action" value="create_user">
+
+            <div class="form-group">
+                <label for="username">Username *</label>
+                <input id="username" name="username" type="text" required>
+                <small class="form-help">Must be unique</small>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input id="password" name="password" type="password" required>
+                <small class="form-help">Minimum 6 characters</small>
+            </div>
+
+            <div class="form-group">
+                <label for="role">User Role *</label>
+                <select id="role" name="role" required>
+                    <option value="user">User (view only)</option>
+                    <option value="admin">Admin (full access)</option>
+                </select>
+            </div>
+
+            <div style="grid-column: 1 / -1; margin-top: 10px;">
+                <button type="submit" class="btn-primary">Create User</button>
+            </div>
+        </form>
+    </section>
+
+    <hr class="divider">
+
+    <!-- List All Users -->
+    <section>
+        <h2>Manage Users</h2>
+
+        {% if all_users %}
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in all_users %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>
+                                <span class="role-badge {% if user.role == 'admin' %}admin{% else %}user{% endif %}">
+                                    {{ user.role.upper() }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if user.id == current_user.id %}
+                                    <span class="status-current">Current User</span>
+                                {% else %}
+                                    <span class="status-active">Active</span>
+                                {% endif %}
+                            </td>
+                            <td class="action-cell">
+                                {% if user.id != current_user.id %}
+                                    <form method="post" action="{{ url_for('delete_user', id=user.id) }}" style="display: inline;">
+                                        <button type="submit" class="btn-link btn-delete" onclick="return confirm('Delete user {{ user.username }}?')">
+                                            Delete
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <span class="muted">—</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="muted">No users found.</p>
+        {% endif %}
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

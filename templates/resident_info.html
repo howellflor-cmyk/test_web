@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Resident Info - Barangay Information System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/resident_info.css') }}">
+        <main class="residents-container">
+            <div class="back-btn">
+                <a href="{{ url_for('residents') }}">Back</a>
+            </div>
+
+            <div class="resident-header">
+                <h1 class="resident-name">{{ resident.first_name}} {{resident.middle_name}} {{resident.last_name}}</h1>
+            </div>
+
+            <table class="resident-info-table">
+                <tr>
+                    <td><strong>Last Name:</strong></td>
+                    <td>{{ resident.last_name }}</td>
+                    <td><strong>Age:</strong></td>
+                    <td>{{ resident.age }} yrs old</td>
+                    <td><strong>Civil Status:</strong></td>
+                    <td>{{ resident.civil_status }}</td>
+                </tr>
+                <tr>
+                    <td><strong>First Name:</strong></td>
+                    <td>{{ resident.first_name }}</td>
+                    <td><strong>Date of Birth:</strong></td>
+                    <td>{% if resident.date_of_birth %}{{ resident.date_of_birth.strftime('%B %d, %Y') }}{% endif %}</td>
+                    <td><strong>Citizenship:</strong></td>
+                    <td>{{ resident.citizenship }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Middle Name:</strong></td>
+                    <td>{{ resident.middle_name }}</td>
+                    <td><strong>Place of Birth:</strong></td>
+                    <td>{{ resident.place_of_birth }}</td>
+                    <td><strong>Occupation:</strong></td>
+                    <td>{{ resident.occupation }}</td>
+                </tr>
+            </table>
+        </main>
+{% endblock %}

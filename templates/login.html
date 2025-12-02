@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Barangay Information System - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+<div class="login-container">
+
+    <div class="login-left">
+           <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+    </div>
+
+    <div class="login-right">
+        <h2>Sign in Account</h2>
+
+        <form class="login-form" method="POST">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" required>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
+
+            <div class="next-container">
+                <span>Login</span>
+                <button type="submit" class="next-btn">❯</button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+
+</body>
+</html>

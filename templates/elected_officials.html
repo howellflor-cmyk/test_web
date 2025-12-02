@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Elected Officials - Barangay Information System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/elected_officials.css') }}">
+
+<div class="container" role="main">
+  <header class="page-header" aria-labelledby="page-title">
+    <h1 id="page-title" class="title">Ellected Officials</h1>
+    {% if current_user.is_authenticated and current_user.role == 'admin' %}
+      <a class="pill" href="{{ url_for('add_elected_official') }}">+ Add Official</a>
+    {% endif %}
+  </header>
+
+  <!-- Chairman -->
+  <section class="info-card" aria-labelledby="chairman-heading" style="margin-top:18px;">
+    <h3 id="chairman-heading">Barangay Chairman</h3>
+
+    {% if chairman %}
+      <div class="chairman-row" style="display:flex;align-items:center;gap:20px;margin-top:12px;">
+        <img class="official-photo" src="{{ url_for('static', filename='uploads/elected_officials/' ~ (chairman.photo_filename or 'default.png')) }}" alt="{{ chairman.name }}">
+        <div>
+          <div style="font-weight:800;font-size:22px;color:#0b2238">{{ chairman.name }}</div>
+          <div class="muted">Punong Barangay</div>
+        </div>
+        <div style="margin-left:auto;">
+          {% if current_user.is_authenticated and current_user.role == 'admin' %}
+            <a class="btn-link" href="{{ url_for('edit_elected_official', id=chairman.id) }}">Edit</a>
+            <form method="post" action="{{ url_for('delete_elected_official', id=chairman.id) }}" style="display:inline">
+              <button type="submit" class="btn-link" onclick="return confirm('Delete chairman?')">Delete</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <p class="muted" style="margin-top:12px">No Chairman set.</p>
+    {% endif %}
+  </section>
+
+  <hr class="divider">
+
+  <!-- Kagawads grid -->
+  <h2 class="section-title">Elected Officials — Kagawad</h2>
+
+  <div class="household-grid" role="list" aria-label="Kagawad list">
+    {% for k in kagawads %}
+      <div class="household-item" role="listitem" aria-label="Kagawad {{ loop.index }}">
+        <div class="hh-left">
+          <img class="official-photo" src="{{ url_for('static', filename='uploads/elected_officials/' ~ (k.photo_filename or 'default.png')) }}" alt="{{ k.name }}">
+          <div class="hh-meta">
+            <div class="hh-title" title="{{ k.name }}">{{ k.name }}</div>
+            <div class="hh-sub">Kagawad{% if k.order %} • No. {{ k.order }}{% endif %}</div>
+          </div>
+        </div>
+
+        <div class="hh-right">
+          {% if current_user.is_authenticated and current_user.role == 'admin' %}
+            <a class="action" href="{{ url_for('edit_elected_official', id=k.id) }}">Edit</a>
+            <form method="post" action="{{ url_for('delete_elected_official', id=k.id) }}" style="display:inline">
+              <button type="submit" class="action" onclick="return confirm('Delete kagawad?')">Delete</button>
+            </form>
+          {% else %}
+            <div class="count muted">Elected member</div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+
+    {# show empty slots up to 7 for visual balance #}
+    {% set count = kagawads|length %}
+    {% for i in range(count + 1, 8) %}
+      <div class="household-item vacant" aria-hidden="true">
+        <div class="hh-left">
+          <div class="pill small">{{ i }}</div>
+          <div class="hh-meta">
+            <div class="hh-title muted">Vacant</div>
+            <div class="hh-sub muted">Kagawad slot</div>
+          </div>
+        </div>
+        <div class="hh-right">
+          {% if current_user.is_authenticated and current_user.role == 'admin' %}
+            <a class="action" href="{{ url_for('add_elected_official') }}">Add</a>
+          {% else %}
+            <div class="count muted">Vacant</div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

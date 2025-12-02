@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Pending Residents - Barangay Information System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/residents.css') }}">
+    <style>
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        .status-approved {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .status-rejected {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .pending-details {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        .review-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-approve {
+            background-color: #10b981;
+            color: white;
+            padding: 6px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-approve:hover {
+            background-color: #059669;
+        }
+        .btn-reject {
+            background-color: #ef4444;
+            color: white;
+            padding: 6px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-reject:hover {
+            background-color: #dc2626;
+        }
+        .pending-info {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+        .pending-info strong {
+            color: #374151;
+        }
+    </style>
+    
+    <main class="residents-container">
+        <h1 class="residents-title">
+            {% if current_user.role == 'admin' %}
+                Pending Residents for Approval
+            {% else %}
+                My Submitted Residents
+            {% endif %}
+        </h1>
+        
+        {% if current_user.role == 'admin' %}
+        <div style="background: #dbeafe; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #1e40af;">
+            <strong>Admin Notice:</strong> Review and approve/reject resident submissions below.
+        </div>
+        {% endif %}
+
+        <ul class="residents-list">
+            {% for pending in pending_residents %}
+            <li class="resident-card">
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span class="resident-name">
+                            {{ pending.first_name }} {{ pending.middle_name }} {{ pending.last_name }}
+                        </span>
+                        <span class="status-badge status-{{ pending.status }}">
+                            {{ pending.status|upper }}
+                        </span>
+                    </div>
+                    
+                    <div class="pending-details">
+                        Submitted by: <strong>{{ pending.submitter.username }}</strong> on 
+                        {{ pending.submitted_at.strftime('%B %d, %Y at %I:%M %p') }}
+                    </div>
+                    
+                    <div class="pending-info">
+                        <strong>Gender:</strong> {{ pending.gender }} | 
+                        <strong>Age:</strong> {{ pending.age }} | 
+                        <strong>Purok:</strong> {{ pending.purok }} | 
+                        <strong>Voter:</strong> {{ pending.voter_status }}
+                        {% if pending.new_household_no %}
+                        <br><strong>New Household:</strong> {{ pending.new_household_no }}
+                        {% elif pending.household_id %}
+                        <br><strong>Household ID:</strong> {{ pending.household_id }}
+                        {% endif %}
+                    </div>
+                    
+                    {% if pending.status != 'pending' %}
+                    <div class="pending-details" style="margin-top: 8px;">
+                        Reviewed by: <strong>{{ pending.reviewer.username if pending.reviewer else 'N/A' }}</strong> on 
+                        {{ pending.reviewed_at.strftime('%B %d, %Y at %I:%M %p') if pending.reviewed_at else 'N/A' }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {% if current_user.role == 'admin' and pending.status == 'pending' %}
+                <div class="review-actions">
+                    <form method="POST" action="{{ url_for('review_resident', id=pending.id, action='approve') }}" style="display:inline;">
+                        <button type="submit" class="btn-approve" onclick="return confirm('Approve this resident?');">
+                            ✓ Approve
+                        </button>
+                    </form>
+                    <form method="POST" action="{{ url_for('review_resident', id=pending.id, action='reject') }}" style="display:inline;">
+                        <button type="submit" class="btn-reject" onclick="return confirm('Reject this submission?');">
+                            ✗ Reject
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            </li>
+            {% else %}
+            <li class="resident-card text-center">
+                {% if current_user.role == 'admin' %}
+                    No pending residents to review.
+                {% else %}
+                    You haven't submitted any residents yet.
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </main>
+{% endblock %}

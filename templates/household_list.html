@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Household List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/household_list.css') }}">
+</head>
+<body>
+    <header class="page-header small">
+        <div class="container">
+            <h1 class="title">Household List</h1>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        <section class="household-grid">
+            {% for h in households %}
+            <a href="{{ url_for('household_detail', id=h.id) }}" class="household-item">
+                <div class="hh-left">
+                    <div class="pill small">{{ h.household_no }}</div>
+                    <div class="hh-meta">
+                        <div>{{ h.barangay or '' }}</div>
+                        <div class="muted">{{ h.city_municipality or '' }}</div>
+                    </div>
+                </div>
+                <div class="hh-right">See members →</div>
+            </a>
+            {% else %}
+            <p>No households found.</p>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+{% endblock %}

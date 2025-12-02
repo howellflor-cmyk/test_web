@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% block body %}
+    <div class="dashboard-flex-root">   
+
+        <nav class="sidebar-nav">
+    <div class="sidebar-brand">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+    </div>
+    <ul class="sidebar-list">
+        <li class="sidebar-item"><a class="sidebar-link" href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li class="sidebar-item"><a class="sidebar-link" href="{{ url_for('residents') }}">Resident Section</a></li>
+        <li class="sidebar-item"><a class="sidebar-link" href="{{ url_for('pending_residents') }}">
+            {% if current_user.role == 'admin' %}
+                Pending Approvals
+            {% else %}
+                My Submissions
+            {% endif %}
+        </a></li>
+        <li class="sidebar-item"><a class="sidebar-link" href="{{ url_for('elected_officials') }}">Elected Officials</a></li>
+        <li class="sidebar-item"><a class="sidebar-link" href="{{ url_for('household_list') }}">Household List</a></li>
+        {% if current_user.role == 'admin' %}
+        <li class="sidebar-item"><a class="sidebar-link" href="{{ url_for('system_settings') }}">System Settings</a></li>
+        {% endif %}
+    </ul>
+
+    <div class="sidebar-logout"><a class="logout-btn" href="{{ url_for('logout') }}">Logout</a></div>
+</nav>
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

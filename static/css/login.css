@@ -1,0 +1,127 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'SF Pro Display Bold', 'SF Pro Display Regular';
+    background: url("../images/bg.png") no-repeat center center fixed;
+    background-size: cover;
+}
+
+.login-container {
+    width: 700px;
+    height: 350px;
+    background: #f3f4f6;
+    border-radius: 45px;
+    box-shadow: 0 14px 42px rgba(0,0,0,0.18);
+    overflow: hidden;
+    display: flex;
+}
+
+.login-left {
+    width: 45%;
+    background: linear-gradient(135deg, #0062ff 0%, #0090ff 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-left img {
+    width: 65%;
+    max-width: 310px;
+    user-select: none;
+}
+
+.login-right {
+    width: 55%;
+    padding: 65px 70px;
+    position: relative;
+    background: #f3f4f6;
+}
+
+.login-right h2 {
+    font-size: 25px;
+    margin: 0 0 35px;
+    font-weight: 700;
+    color: #0b1b35;
+}
+
+.login-form label {
+    font-size: 12px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.8px solid #0b55ff;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-bottom: 18px;
+    outline: none;
+    background: #ffffff;
+    transition: 0.2s;
+}
+
+.login-form input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,122,255,0.2);
+}
+
+.next-container {
+    position: absolute;
+    right: 40px;
+    bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.next-container span {
+    color: #222;
+    font-size: 12px;
+}
+
+.next-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: #0b55ff;
+    color: #fff;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.next-btn:hover {
+    background: #004ed6;
+}
+
+@media (max-width: 900px) {
+    .login-container {
+        flex-direction: column;
+        height: auto;
+        width: 90%;
+    }
+
+    .login-left {
+        width: 100%;
+        padding: 40px 0;
+    }
+
+    .login-right {
+        width: 100%;
+        padding: 40px;
+    }
+
+    .next-container {
+        right: 25px;
+        bottom: 25px;
+    }
+}
